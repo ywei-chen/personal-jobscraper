@@ -1,11 +1,16 @@
 def transfrom_jobData(jobData):
+    """
+    將fetch的資料轉換為dist(key , value)
+    後續透過load.py 轉換為Column存進DB
+    """
+
     transfromed_jobData = []
 
     for job in jobData:
         each_jobData ={
-            # 預留DB的PK
+            # 預留DB的PK主鍵
             'id': job.get('custNo', None),
-
+            
              # 首頁呈現: 公司名稱、職稱、直轄市區、薪資
             'company': job.get('custName', None),
             'name': job.get('jobName', None),
@@ -21,7 +26,6 @@ def transfrom_jobData(jobData):
             'skill': '、'.join([s['description'] for s in job.get('pcSkills')]) 
                      if job.get('pcSkills') 
                      else "不拘",
-            'link': job.get('link').get('cust')
         }
         
         transfromed_jobData.append(each_jobData)

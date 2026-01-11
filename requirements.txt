@@ -1,0 +1,6 @@
+# 資料庫
+sqlalchemy==2.0.36
+psycopg[binary]==3.3.2
+
+# 環境變數
+python-dotenv==1.0.1

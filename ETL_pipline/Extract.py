@@ -9,7 +9,6 @@ def fetch_jobData():
     職位: 前端、後端、全端、軟體 工程師
     預設抓取5頁共100個職缺資訊
     """
-
     count = 1
     jobData = []
     prev = None
