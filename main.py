@@ -1,10 +1,9 @@
-from ETL_pipline import Extract, Transform
-from DB import testconnection
+from ETL_pipline import Extract, Transform, Load
+from DB import testconnection, operation
 
-data = Extract.fetch_jobData()
-test = Transform.transfrom_jobData(data)
-postDB = testconnection.test_connection()
-
-
-# for i, job in enumerate(test, start=1):
-#     print(f"{i}.{job['company']}_ {job['name']}_ {job['addr']}")
+raw_data = Extract.fetch_jobData()
+transed_data = Transform.transform_jobData(raw_data)
+db_test = testconnection.test_connection()
+operation.drop_table()
+operation.create_table()
+load_db = Load.load_to_db(transed_data)

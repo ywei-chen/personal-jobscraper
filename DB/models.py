@@ -1,5 +1,5 @@
 from sqlalchemy.orm import declarative_base
-from sqlalchemy import Column, String, Text
+from sqlalchemy import Column, String, Text, Integer
 
 Base = declarative_base()
 """
@@ -10,7 +10,7 @@ class Job(Base):
     __tablename__ = "jobs"
 
     # PK主鍵
-    id = Column(String(20), primary_key= True, comment= 'custNo')
+    id = Column(Integer, primary_key=True, autoincrement=True, comment='編號')
 
     # 首頁基本資訊
     company = Column(String(50), comment='公司名稱')
@@ -20,9 +20,9 @@ class Job(Base):
 
     # 內部詳細資訊
     description = Column(Text, comment='工作內容')
-    realAddr = Column(String(100), comment="完整地址")
-    workingtime = Column(String(100), comment="上班時間")
-    skill = Column(String(100), comment="所需技能")
+    realAddr = Column(String(500), comment="完整地址")
+    workingtime = Column(String(500), comment="上班時間")
+    skill = Column(String(500), comment="所需技能")
     link = Column(String(500), comment="應徵連結")
 
 

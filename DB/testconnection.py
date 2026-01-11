@@ -5,10 +5,11 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
 load_dotenv()
-DB_URL = f"postgresql+psycopg://{getenv('DB_USER')}:{getenv('DB_PASSWORD')}@{getenv('DB_HOST')}:{getenv('DB_PORT')}/{getenv('DB_NAME')}"
+DB_URL = f"postgresql+psycopg://{getenv('DB_USER')}:{getenv('DB_PASSWORD')}@{getenv('DB_HOST')}:{getenv('DB_PORT')}/{getenv('DB_NAME')}?client_encoding=utf8"
 # Session是一個類別!
-# 建立global讓其他模組可import共用
-Session = sessionmaker(create_engine(DB_URL, pool_pre_ping=True))
+# 建立global讓engine、Session可在其他模組import共用
+engine = create_engine(DB_URL, pool_pre_ping=True)
+Session = sessionmaker(engine)
 
 def test_connection():
     """
