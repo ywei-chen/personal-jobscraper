@@ -11,7 +11,9 @@ Jobs API
 
 app = FastAPI(title="Job_API", description="Job_DATA")
 
-class Job_response(BaseModel):
+
+# 用於Job_detail的資料格式
+class JobDetail_response(BaseModel):
     id: int
     company: Optional[str] = None
     name: Optional[str] = None
@@ -25,16 +27,45 @@ class Job_response(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+# 用於Job_list的資料格式
+class JobList_response(BaseModel):
+    id: int
+    company: Optional[str] = None
+    name: Optional[str] = None
+    addr: Optional[str] = None
+    salary: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+
 def get_db():
     with Session() as db:
         yield db
 
 @app.get(
-    "/jobs", 
-    response_model= list[Job_response],
-    summary="取得所有職缺",
-    description="回傳目前資料庫中所有已整理完成的職缺資料"
+    "/jobs/{job_id}", 
+    response_model= JobDetail_response,
+    summary="取得所有職缺的詳細資料",
+    description="回傳詳細的職缺資料，用於單一職缺詳情"
     )
-def get_all_jobs(db = Depends(get_db)):
-    jobs = db.query(Job).all()
+def get_per_jobsDetail(job_id: int, db = Depends(get_db)):
+    jobs = db.query(Job).filter(Job.id == job_id).first()
+    return jobs
+
+
+@app.get(
+    "/jobs",
+    response_model= list[JobList_response],
+    summary="取得所有職缺的部分資料",
+    description="回傳部分的職缺資料，用於職缺列表頁"
+)
+def get_all_jobsList(db = Depends(get_db)):
+    jobs = db.query(
+        Job.id,
+        Job.company,
+        Job.name,
+        Job.addr,
+        Job.salary
+    ).all()
     return jobs
