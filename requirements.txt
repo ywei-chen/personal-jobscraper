@@ -9,3 +9,7 @@ python-dotenv==1.0.1
 fastapi
 uvicorn[standard]
 pydantic
+
+# 測試
+pytest
+httpx
