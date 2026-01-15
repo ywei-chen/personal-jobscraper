@@ -1,14 +1,13 @@
-# Pydantic Schema - 定義 API 回傳的資料格式
-# dependency injection
-# get method
-
-
-from fastapi import FastAPI, Depends, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI, Depends
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from DB.testconnection import Session
 from DB.models import Job
-from fastapi.responses import JSONResponse
+
+"""
+Jobs API
+職缺資料相關的 API 端點
+"""
 
 app = FastAPI(title="Job_API", description="Job_DATA")
 
@@ -24,14 +23,18 @@ class Job_response(BaseModel):
     skill: Optional[str] = None
     link: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 def get_db():
     with Session() as db:
         yield db
 
-@app.get("/jobs", response_model= list[Job_response])
+@app.get(
+    "/jobs", 
+    response_model= list[Job_response],
+    summary="取得所有職缺",
+    description="回傳目前資料庫中所有已整理完成的職缺資料"
+    )
 def get_all_jobs(db = Depends(get_db)):
     jobs = db.query(Job).all()
     return jobs
