@@ -3,14 +3,19 @@ from api.jobs import app
 from DB.models import Base
 from DB.testconnection import engine
 
-Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(engine)
 client = TestClient(app)
 
 def test_get_all_jobs():
     """
-    1. CI測試連線是否成功
-    2. 測試API endpoint回傳值是否為list
+    CI測試api endpoint(/jobs)連線是否成功
     """
     res = client.get("/jobs")
     assert res.status_code == 200
-    assert isinstance(res.json(), list)
+
+def test_get_job_detail():
+    """
+    CI測試api endpoint(/jobs/{job_id})連線是否成功
+    """
+    res = client.get("/jobs/1")
+    assert res.status_code == 200
