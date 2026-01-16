@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict
 from typing import Optional
@@ -58,6 +58,8 @@ def get_db():
     )
 def get_per_jobsDetail(job_id: int, db = Depends(get_db)):
     jobs = db.query(Job).filter(Job.id == job_id).first()
+    if jobs is None:
+        raise HTTPException(status_code=404, detail=f"Job with id {job_id} not found")
     return jobs
 
 
