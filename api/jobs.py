@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from DB.testconnection import Session
@@ -10,6 +11,12 @@ Jobs API
 """
 
 app = FastAPI(title="Job_API", description="Job_DATA")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins= ["http://localhost:5173"],
+    allow_methods=["*"]
+)
 
 
 # 用於Job_detail的資料格式
